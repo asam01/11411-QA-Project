@@ -53,5 +53,35 @@ class TestThirdPersonSingular (unittest.TestCase):
         self.assertEqual(q1, bin_q(s1))
         self.assertEqual(q2, bin_q(s2))
 
+class TestThirdPersonPlural (unittest.TestCase):
+
+    def testSimpleCases(self):
+        s1 = 'They like ice cream a lot.'
+        q1 = 'Does they like ice cream a lot?'
+
+        s2 = 'They runs in the park every week.'
+        q2 = 'Do they run in the park every week?'
+
+        s3 = 'They like the grocery store.'
+        q3 = 'Do they like the grocery store?'
+
+        self.assertEqual(q1, bin_q(s1))
+        self.assertEqual(q2, bin_q(s2))
+        self.assertEqual(q3, bin_q(s3))
+
+    def testComplexCases(self):
+        s1 = 'They go shopping every month.'
+        q1 = 'Do they go shopping every month?'
+
+        s2 = 'They always carry their purses with them.'
+        q2 = 'Do they always carry their purses with them?'
+
+        s3 = 'Alice and Bob love going to parties.'
+        q3 = 'Do Alice and Bob love going to parties?'
+
+        self.assertEqual(q1, bin_q(s1))
+        self.assertEqual(q2, bin_q(s2))
+        self.assertEqual(q3, bin_q(s3))
+
 if __name__ == '__main__':
     unittest.main()
