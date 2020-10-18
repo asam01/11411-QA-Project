@@ -54,7 +54,8 @@ def ask_compound_bin_question(sentence):
                 question += ' ' + token.text.lower()
             else:
                 question += ' ' + token.text
-        elif token.pos_ == 'VERB':
+        # account for case of gerund/present participle
+        elif token.pos_ == 'VERB' and 'gerund' not in spacy.explain(token.tag_):
             question += ' ' + lemma 
         elif token.pos_ == 'DET': 
             question += ' ' + token.text.lower() 
