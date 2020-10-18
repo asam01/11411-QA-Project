@@ -13,21 +13,23 @@ def ask_compound_bin_question(sentence):
     
     lemma = ''
     correct_do = ''
-    exp = ''
+    subject_explained = ''
     # lemmatize verb
     for token in doc:
 
         # TODO: account for all types of subjects
         if 'subj' in token.dep_:
             subj = token.text.lower() 
-            exp = spacy.explain(token.tag_)
+            subject_explained = spacy.explain(token.tag_)
   
         if token.pos_ == "VERB":
             explained = spacy.explain(token.tag_)
 
             if subj == 'they': 
                 correct_do = 'Do'
-            elif('plural' in exp):
+            elif 'plural' in subject_explained:
+                correct_do = 'Do'
+            elif 'personal' in subject_explained:
                 correct_do = 'Do'
             elif 'present' in explained:
                 if 'singular' in explained: 
@@ -48,13 +50,13 @@ def ask_compound_bin_question(sentence):
     for token in doc: 
 
         if 'subj' in token.dep_:
-            if token.pos_ == 'PRON':
+            if token.pos_ == 'PRON' and token.text != 'I':
                 question += ' ' + token.text.lower()
             else:
                 question += ' ' + token.text
-        elif(token.pos_ == 'VERB'):
+        elif token.pos_ == 'VERB':
             question += ' ' + lemma 
-        elif(token.pos_ == 'DET'): 
+        elif token.pos_ == 'DET': 
             question += ' ' + token.text.lower() 
         
       # end question at punctuation
@@ -66,4 +68,4 @@ def ask_compound_bin_question(sentence):
 
     return question
 
-print(ask_compound_bin_question('Boys run every day.'))
+#print(ask_compound_bin_question('Boys run every day.'))
