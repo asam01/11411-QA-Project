@@ -57,7 +57,7 @@ class TestThirdPersonPlural (unittest.TestCase):
 
     def testSimpleCases(self):
         s1 = 'They like ice cream a lot.'
-        q1 = 'Does they like ice cream a lot?'
+        q1 = 'Do they like ice cream a lot?'
 
         s2 = 'They runs in the park every week.'
         q2 = 'Do they run in the park every week?'
@@ -79,9 +79,13 @@ class TestThirdPersonPlural (unittest.TestCase):
         s3 = 'Alice and Bob love going to parties.'
         q3 = 'Do Alice and Bob love going to parties?'
 
+        s4 = 'Well, Alice and Bob really hate brussel sprouts.'
+        q4 = 'Do Alice and Bob really hate brussel sprouts?'
+
         self.assertEqual(q1, bin_q(s1))
         self.assertEqual(q2, bin_q(s2))
         self.assertEqual(q3, bin_q(s3))
+        self.assertEqual(q4, bin_q(s4))
 
 if __name__ == '__main__':
     unittest.main()
