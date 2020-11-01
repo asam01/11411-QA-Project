@@ -1,0 +1,11 @@
+certifi==2020.6.20
+click==7.1.2
+en==0.0.1
+fststr==0.2
+joblib==0.17.0
+nltk==3.5
+numpy==1.19.2
+openfst==1.6.9
+pycosat==0.6.3
+regex==2020.10.15
+tqdm==4.50.2
