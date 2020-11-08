@@ -19,13 +19,11 @@ def preprocess(sentence):
     sent = list(doc.sents)[0]
     children = list(sent._.children)
     puncts = '?!.,;:-'
-    #print(list(sent._.constituents))
     for clause in children: 
         if clause.text not in puncts:
-            #print(clause._.labels)
             if 'S' in clause._.labels:
                 clauses.append((clause.text + '.'))
-
+            
     if not clauses:
         return [sentence]
     else:
@@ -125,7 +123,7 @@ def ask_q (sentence):
     questions = postprocess(sentences)
     return questions
 
-'''s4 = 'Unfortunately, Alice and Bob really hate brussel sprouts.'
+'''s4 = 'Unfortunately for their mother, Alice and Bob really hate brussel sprouts.'
 print(ask_q(s4))
 
 s5 = 'Alice, who is nice, said hi to me.'
@@ -138,4 +136,7 @@ s7 = 'I went to the store, however, Alice said hello.'
 print(ask_q(s7))
 
 s8 = 'Alice ran yesterday.'
-print(ask_q(s8))'''
+print(ask_q(s8))
+
+s9 = 'Alan Turing liked potatoes because they are delicious.'
+print(ask_q(s9)) '''
