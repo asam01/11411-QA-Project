@@ -16,6 +16,8 @@ def preprocess(sentence):
     #lowerbound = 0 
 
     #print(len(list(doc.sents)))
+    if len(list(doc.sents)) == 0:
+        return clauses
     sent = list(doc.sents)[0]
     children = list(sent._.children)
     puncts = '?!.,;:-'
@@ -114,7 +116,7 @@ def postprocess (sentences):
 
     questions = []
     for sentence in sentences:
-        questions.append(ask_compound_bin_question(sentence))
+        questions.append((ask_compound_bin_question(sentence), sentence))
 
     return questions
 

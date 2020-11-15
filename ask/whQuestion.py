@@ -2,6 +2,7 @@ import spacy
 import benepar
 from benepar.spacy_plugin import BeneparComponent
 from compoundBinary import preprocess
+from determineInterrogative import sentenceNER
 nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(BeneparComponent('benepar_en2'))
     
@@ -31,7 +32,7 @@ def generateWhenWhereFromQ(question, entity_dict):
         #print(clause.text, clause._.labels)
         if 'PP' in clause._.labels:
             for word in entity_dict: 
-                if((entity_dict[word]=='When' or entity_dict[word]=='Where') and word in clause.text):
+                if((entity_dict[word]=='When' or entity_dict[word]=='Where') and word.text in clause.text):
                     stringtotakeout = clause.text
                     questionword = entity_dict[word]
                     
@@ -103,6 +104,24 @@ def generateWhyFromQ(question):
             question = 'Why ' + question[0] + '?'
             return question  
    
+def askWhQuestion(q, sentence):
+    
+    entity_dict = sentenceNER(sentence)
+    questions = [] 
+    for properNoun in entity_dict:
+        interrogative = entity_dict[properNoun] 
+        if interrogative == 'Who':
+            questions.append(generateWhoFromSentence(sentence, entity_dict))
+        elif interrogative == 'What':
+            questions.append(generateWhatFromQ(q))
+        else:
+            questions.append(generateWhenWhereFromQ(q, entity_dict))
+
+        whyQ = generateWhyFromQ(q)
+        if whyQ:
+            questions.append(whyQ) 
+
+    return questions    
 
 
 '''print(generateWhenWhereFromQ('Did Alan Turing live in England?', {'Alan Turing': 'Who', 'England': 'Where'}))
@@ -111,5 +130,5 @@ print(generateWhenWhereFromQ('Is Carnegie Mellon in Pittsburgh, Pennsylvania?', 
 print(generateWhoFromSentence('Alan Turing is the father of computer science?', {'Alan Turing': 'Who'}))
 print(generateWhoFromSentence('Alan Turing lived in England.', {'Alan Turing': 'Who', 'England': 'Where'}))
 print(generateWhoFromSentence("Alice said hi, but I forgot to reply.", {'Alice': 'Who', 'I':'Who'}))
-print(generateWhatFromQ('Did Alan Turing like ice cream?'))'''
-print(generateWhyFromQ('Did Alan Turning like potatoes because they are delicious?'))
+print(generateWhatFromQ('Did Alan Turing like ice cream?'))
+print(generateWhyFromQ('Did Alan Turning like potatoes because they are delicious?'))'''

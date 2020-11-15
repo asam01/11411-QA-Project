@@ -26,7 +26,7 @@ to_be = ['am', 'is', 'are', 'was', 'were']
 '''
 aux_verb = ['must', 'can', 'could', 'shall', 'should', 'will', 'would', 'may', 'might']
 
-def simpleBinary(input):
+def ask_simple_binary(input):
     result = []
     for sentence in input:
         words = sentence.split()
@@ -44,7 +44,7 @@ def simpleBinary(input):
                 beVCap = beV[0].upper() + beV[1:]
                 newSentence = beVCap + ' ' + ' '.join(words)
                 # directly return here, hence will only produce 1 question for each sentence for now
-                result.append(newSentence)
+                result.append((newSentence + "?", sentence))
 
         for auxV in aux_verb:
             if auxV in words:
@@ -56,10 +56,9 @@ def simpleBinary(input):
                 auxVCap = auxV[0].upper() + auxV[1:]
                 newSentence = auxVCap + ' ' + ' '.join(words)
                 # directly return here, hence will only produce 1 question for each sentence for now
-                result.append(newSentence)
+                result.append((newSentence + "?", sentence))
     
-    for question in result:
-        print(question)
+    return result
 
 '''
 things to do:
@@ -70,7 +69,7 @@ things to do:
     - else...?
 '''
 
-s1 = "Gyarados (Gyaradosu) is a Pokémon species in Nintendo and Game Freak's Pokémon franchise."
+''''s1 = "Gyarados (Gyaradosu) is a Pokémon species in Nintendo and Game Freak's Pokémon franchise."
 s2 = "Created by Ken Sugimori, Gyarados first appeared in the video games Pokémon Red and Pokemon Green and subsequent sequels, later appearing in various merchandise, spinoff titles and animated and printed adaptations of the franchise. "
 s3 = "Lesley should be doing her homework."
 s4 = "This is a good idea."
@@ -78,5 +77,5 @@ s5 = "Just a random sentence."
 s6 = "I must go."
 input = [s1, s2, s3, s4, s5, s6]
 result = simpleBinary(input)
-print(result)
+print(result)'''
 

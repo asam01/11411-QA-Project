@@ -36,6 +36,6 @@ def sentenceNER(sentence):
             
     return entity_dict   
 
-print(sentenceNER('Did Alan turing live in England?'))
+'''print(sentenceNER('Did Alan turing live in England?'))
 print(sentenceNER('Is Carnegie Mellon in Pittsburgh, Pennsylvania?'))
-print(sentenceNER('Is Alan Turing the father of computer science?'))
+print(sentenceNER('Is Alan Turing the father of computer science?'))'''

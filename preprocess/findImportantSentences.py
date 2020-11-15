@@ -185,7 +185,7 @@ def _generate_summary(sentences, sentenceValue, threshold, num_sentences):
     # extend to output a certain number of sentences. 
     for sentence in sentences:
         if sentence[:15] in sentenceValue and sentenceValue[sentence[:15]] >= (threshold):
-            summary += "\n" + sentence
+            summary += sentence + "\n"
             sentence_count += 1
 
     if sentence_count < num_sentences:
