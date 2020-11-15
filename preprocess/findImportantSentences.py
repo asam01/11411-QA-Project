@@ -32,7 +32,7 @@ The Institute began as a research organization which performed work for governme
 In 1927, the Mellon Institute incorporated as an independent nonprofit. In 1937, the Mellon Institute's iconic building was completed and it moved to its new, and current, location on Fifth Avenue.'''
 
 # fine tune these parameters later
-NUM_SENTENCES = 5
+#NUM_SENTENCES = 5
 DISCOUNT_FACTOR = .95
 
 
@@ -179,22 +179,22 @@ def _find_average_score(sentenceValue) -> int:
     return average
 
 
-def _generate_summary(sentences, sentenceValue, threshold):
+def _generate_summary(sentences, sentenceValue, threshold, num_sentences):
     sentence_count = 0
     summary = ''
     # extend to output a certain number of sentences. 
     for sentence in sentences:
         if sentence[:15] in sentenceValue and sentenceValue[sentence[:15]] >= (threshold):
-            summary += " " + sentence
+            summary += "\n" + sentence
             sentence_count += 1
 
-    if sentence_count < NUM_SENTENCES:
-       return _generate_summary(sentences, sentenceValue, threshold * DISCOUNT_FACTOR)
+    if sentence_count < num_sentences:
+       return _generate_summary(sentences, sentenceValue, threshold * DISCOUNT_FACTOR, num_sentences)
 
     return summary
 
 
-def run_summarization(text):
+def run_summarization(text, num_sentences):
     """
     :param text: Plain summary_text of long article
     :return: summarized summary_text
@@ -244,10 +244,5 @@ def run_summarization(text):
     #print(threshold)
 
     # 9 Important Algorithm: Generate the summary
-    summary = _generate_summary(sentences, sentence_scores, 1.3 * threshold)
+    summary = _generate_summary(sentences, sentence_scores, 1.3 * threshold, num_sentences)
     return summary
-
-
-if __name__ == '__main__':
-    result = run_summarization(text_str)
-    print(result)
