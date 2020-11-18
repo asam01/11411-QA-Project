@@ -40,12 +40,8 @@ def generateWhenWhereFromQ(question, entity_dict):
                     question = question.split(stringtotakeout) 
                     question = questionword + ' ' + "".join(question)
                     return question 
-        
-    
-
-
-                    
-def generateWhoFromSentence(sentence, entity_dict):
+          
+def generateWhoFromSentence(sentence, properNoun):
     clauses = preprocess(sentence)
     questions = [] 
     for sent in clauses: 
@@ -56,22 +52,25 @@ def generateWhoFromSentence(sentence, entity_dict):
         questionword = '' 
         for clause in constituents:
             if 'NP' in clause._.labels:
-                for word in entity_dict: 
-                    if(entity_dict[word] == 'Who' and word == clause.text): 
-                        stringtotakeout = clause.text
-                        questionword = entity_dict[word]  
-                        question = sent.split(stringtotakeout) 
-                        question = questionword + ' ' + "".join(question)
-                        questions.append(question[:len(question)-1] + '?')
+                if(properNoun.text == clause.text): 
+                    stringtotakeout = clause.text
+                    questionword = "Who"
+                    question = sent.split(stringtotakeout) 
+                    question = questionword + ' ' + "".join(question)
+                    questions.append(question[:len(question)-1] + '?')
     
-    return questions 
+    return questions
 
-
-def generateWhatFromQ(question): 
+def generateWhatFromQ(question, properNoun): 
     # Did Alan Turing like ice cream? --> What did Alan Turing like?
     # deal with "what" questions - replace 
-    # direct object with "what"
-    prevtoken = None 
+    # entity_dict word with what
+    question = question.lower() 
+    question = question.split(properNoun.text.lower())
+    question = "What " + "".join(question)
+    return question  
+
+    '''prevtoken = None 
     doc = nlp(question)
     for token in doc:
         if prevtoken is not None and 'compound' in prevtoken.dep_ and 'obj' in token.dep_:
@@ -91,7 +90,7 @@ def generateWhatFromQ(question):
         prevtoken = token
         
 
-    return ""
+    return ""'''
 
 # Alan Turing liked potatoes because they are delicious.
 # --> Did Alan Turning like potatoes because they are delicious?
@@ -102,18 +101,26 @@ def generateWhyFromQ(question):
         if(word in question): 
             question = question.split(word) 
             question = 'Why ' + question[0] + '?'
-            return question  
+            return question 
+
+def generateHowManyFromSentence(sentence, properNoun):
+    sentence = sentence.split(properNoun.text) 
+    sentence = sentence[0] + ' how many ' + sentence[1] + '?' 
+    return sentence 
    
 def askWhQuestion(q, sentence):
     
     entity_dict = sentenceNER(sentence)
+    #print('\n\n\nentity dict: ', entity_dict)
     questions = [] 
     for properNoun in entity_dict:
         interrogative = entity_dict[properNoun] 
         if interrogative == 'Who':
-            questions.append(generateWhoFromSentence(sentence, entity_dict))
+            questions.append(generateWhoFromSentence(sentence, properNoun))
         elif interrogative == 'What':
-            questions.append(generateWhatFromQ(q))
+            questions.append(generateWhatFromQ(q, properNoun))
+        elif interrogative == 'How many': 
+            questions.append(generateHowManyFromSentence(sentence, properNoun)) 
         else:
             questions.append(generateWhenWhereFromQ(q, entity_dict))
 

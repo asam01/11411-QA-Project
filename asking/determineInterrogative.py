@@ -25,11 +25,14 @@ def sentenceNER(sentence):
         elif tag == 'DATE' or tag == "TIME":
             entity_dict[word] = 'When'
 
-        elif tag == "MONEY":
+        elif tag == "MONEY" or tag == "QUANTITY":
             entity_dict[word] = "How much"
         
         elif tag == 'LOC' or tag == 'GPE': 
             entity_dict[word] = "Where" 
+        
+        elif tag == 'CARDINAL':
+            entity_dict[word] = "How many"
         
         else:
             entity_dict[word] = "What"

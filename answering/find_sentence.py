@@ -11,6 +11,7 @@ def find_sentence(question, corpus):
     low_score = 1
     q_tags = nltk.pos_tag(word_tokenize(question))
     score_list = []
+    corpus = corpus.split("\n")
 
     for sentence in corpus:
         score = 0

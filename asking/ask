@@ -1,20 +1,9 @@
+#!/usr/bin/env python3
+
 # NOTE: for relative imports to work, run this from the '11411-QA-Project' directory
 import sys
 import io
-
-#sys.path.append('./preprocess')
-#from preprocess import tokenize 
-#from tokenize import convertPronoun2Noun
-#from findImportantSentences import run_summarization
-#from .preprocess.findImportantSentences import run_summarization 
-
-#from compoundBinary import ask_q
-#from simpleBinary import simpleBinary 
-#from whQuestion import askWhQuestion
-#import ask_q, simpleBinary, askWhQuestion
-#from .ask.compoundBinary import ask_q
-#from .ask.simpleBinary import simpleBinary 
-#from .ask.whQuestion import askWhQuestion
+import itertools
 
  
 import compoundBinary 
@@ -73,12 +62,19 @@ if __name__ == '__main__':
     for (q,s) in binary_questions:
         wh_questions.append(whQuestion.askWhQuestion(q,s))
     
+    # flatten
+    all_wh_questions = list(itertools.chain(*wh_questions))
+
 
     # step 7: rank & output to console
-    for question in wh_questions:
-        print(question)
+    for i in range(0, nquestions):
+        if (i < len(all_wh_questions)):
+            question = all_wh_questions[i]
+            if question:
+                print(question)
 
     ## NOTE: what questions seem to be problematic
+    ##prioritize when, where, who and how many 
 
 
 
