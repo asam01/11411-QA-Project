@@ -2,6 +2,9 @@ import nltk
 from nltk import pos_tag, word_tokenize
 import numpy as np
 
+
+# This function is to take in a question and a corpus, and outputs 
+# top three relevant sentences that might contain answers in the given corpus. 
 def find_sentence(question, corpus):
     good_tags = ["NN", "NNS", "NNP", "NNPS", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
     high_score = 3
@@ -56,5 +59,3 @@ q5 = "Who is KT?"
 
 raw = "The thermal conductivity of a material is a measure of its ability to conduct heat.\n Heat transfer occurs at a lower rate in materials of low thermal conductivity than in materials of high thermal conductivity.\nFor instance, metals typically have high thermal conductivity and are very efficient at conducting heat, while the opposite is true for insulating materials like Styrofoam.\nCorrespondingly, materials of high thermal conductivity are widely used in heat sink applications, and materials of low thermal conductivity are used as thermal insulation.\nThe reciprocal of thermal conductivity is called thermal resistivity.\nThis is known as Fourier's Law for heat conduction. \n Although commonly expressed as a scalar, the most general form of thermal conductivity is a second-rank tensor.\nHowever, the tensorial description only becomes necessary in materials which are anisotropic."
 corpus = raw.splitlines()
-
-print(find_sentence(q5, corpus))
