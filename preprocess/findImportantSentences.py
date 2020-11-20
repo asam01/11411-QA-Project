@@ -1,9 +1,12 @@
 # this is adapted from https://github.com/akashp1712/nlp-akash/blob/master/text-summarization/TF_IDF_Summarization.py
 
+import warnings
+warnings.filterwarnings("ignore")
+
 import math
 import nltk
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
 from nltk import sent_tokenize, word_tokenize, PorterStemmer
 from nltk.corpus import stopwords
 

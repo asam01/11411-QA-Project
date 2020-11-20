@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
+# uncomment to suppress warnings about version
+import warnings
+warnings.filterwarnings("ignore")
+
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 # NOTE: for relative imports to work, run this from the '11411-QA-Project' directory
 import sys
 import io
 import itertools
-
  
 import compoundBinary 
 import simpleBinary 
@@ -47,31 +56,55 @@ if __name__ == '__main__':
             if(s==sent): 
                 cb_input.remove(sent) 
 
+    #print('step 4.5')
     #print('simple binary: ', simple_binary_questions)
     # compound binary
-    compound_binary = []  
-    for sent in cb_input:
-        for (q,s) in compoundBinary.ask_q(sent):  
-            compound_binary.append((q,s)) 
+    compound_binary = []
+    if(nquestions <= len(cb_input)):   
+        for sent in cb_input[:nquestions]:
+            for (q,s) in compoundBinary.ask_q(sent):  
+                compound_binary.append((q,s))
+    else: 
+        for sent in cb_input:
+            for (q,s) in compoundBinary.ask_q(sent):  
+                compound_binary.append((q,s))
+
 
     #print('compound binary: ', compound_binary)
     binary_questions = compound_binary + simple_binary_questions
     #print('all qs: ', binary_questions )
     wh_questions = [] 
+    #print('step 5')
     # step 5: generate wh- questions
-    for (q,s) in binary_questions:
-        wh_questions.append(whQuestion.askWhQuestion(q,s))
-    
+    #print(len(binary_questions))
+    '''if(nquestions <= len(binary_questions)):  
+        for (q,s) in binary_questions[:nquestions]:
+            wh_questions.append(whQuestion.askWhQuestion(q,s))
+    else:
+        for (q,s) in binary_questions:
+            wh_questions.append(whQuestion.askWhQuestion(q,s))'''
+
+    #all_wh_questions = binary_questions
+    all_wh_questions = []
+    for (q,s) in binary_questions: 
+        all_wh_questions.append(q)
+        
+
+    #print('all wh: ', all_wh_questions)
     # flatten
-    all_wh_questions = list(itertools.chain(*wh_questions))
+    #all_wh_questions = list(itertools.chain(*wh_questions))
 
 
-    # step 7: rank & output to console
+    #print("step 6")
+    # step 6: rank & output to console
     for i in range(0, nquestions):
         if (i < len(all_wh_questions)):
             question = all_wh_questions[i]
             if question:
                 print(question)
+
+        else:
+            print('no question')
 
     ## NOTE: what questions seem to be problematic
     ##prioritize when, where, who and how many 

@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import spacy
 from spacy import displacy
 from spacy.pipeline import EntityRecognizer
@@ -5,9 +8,6 @@ from collections import Counter
 import requests
 import re
 nlp = spacy.load("en_core_web_sm")
-
-import warnings
-warnings.filterwarnings("ignore")
 
 # who, what, where, when
 def sentenceNER(sentence):  

@@ -1,14 +1,19 @@
+import warnings
+warnings.filterwarnings("ignore")
+
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 import spacy
 import benepar
+benepar.download('benepar_en2', quiet=True)
+
 from benepar.spacy_plugin import BeneparComponent
 from compoundBinary import preprocess
 from determineInterrogative import sentenceNER
 nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(BeneparComponent('benepar_en2'))
-    
-# uncomment to suppress warnings about version
-import warnings
-warnings.filterwarnings("ignore")
+
 
 # use parse tree to determine which word to replace with interrogative
 

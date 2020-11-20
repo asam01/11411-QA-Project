@@ -1,11 +1,11 @@
+# uncomment to suppress warnings about version
+import warnings
+warnings.filterwarnings("ignore")
+
 #import nltk
 import spacy
 import benepar
 from benepar.spacy_plugin import BeneparComponent
-
-# uncomment to suppress warnings about version
-import warnings
-warnings.filterwarnings("ignore")
 
 #python -m pip install tensorflow==1.14 will help.
 def preprocess(sentence):

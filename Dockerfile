@@ -10,6 +10,14 @@ RUN apt-get -y update && \
     apt-get -y upgrade && \
     apt-get -y install python3-pip python3-dev
 
+# Add the files into container, under QA folder, modify this based on your need
+ADD asking /QA/
+ADD answering /QA/
+ADD preprocess /QA/
+ADD neuralcoref /QA/
+ADD __init__.py /QA/
+ADD requirements.txt /QA/
+
 # Install everything
 RUN pip3 install --upgrade pip
 RUN pip3 install spacy==2.3.0
@@ -28,14 +36,7 @@ RUN python3 -m spacy download en_core_web_lg
 RUN python3 -m spacy download en_core_web_sm
 RUN python3 -m nltk.downloader punkt
 RUN python3 -m nltk.downloader stopwords  
-
-# Add the files into container, under QA folder, modify this based on your need
-ADD asking /QA
-ADD answering /QA
-ADD preprocess /QA
-ADD neuralcoref /QA
-ADD __init__.py /QA
-ADD requirements.txt /QA
+RUN python3 -m nltk.downloader averaged_perceptron_tagger
 
 # Change the permissions of programs
 CMD ["chmod 777 /QA/*"]

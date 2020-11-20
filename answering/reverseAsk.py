@@ -1,14 +1,18 @@
-import spacy
-import benepar
-from benepar.spacy_plugin import BeneparComponent
-
-nlp = spacy.load("en_core_web_sm")
-nlp.add_pipe(BeneparComponent('benepar_en2'))
-    
 # uncomment to suppress warnings about version
 import warnings
 warnings.filterwarnings("ignore")
 
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+import nltk
+import spacy
+import benepar
+from benepar.spacy_plugin import BeneparComponent
+
+benepar.download('benepar_en2', quiet=True)
+nlp = spacy.load("en_core_web_sm")
+nlp.add_pipe(BeneparComponent('benepar_en2'))
 
 
 # Input: the question statement, and top 3 relevant sentences we identified 

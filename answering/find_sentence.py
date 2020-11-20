@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import nltk
 from nltk import pos_tag, word_tokenize
 import numpy as np

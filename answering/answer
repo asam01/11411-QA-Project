@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 
+# uncomment to suppress warnings about version
+import warnings
+warnings.filterwarnings("ignore")
+
+import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 import spacy
 import nltk
 import benepar
@@ -14,11 +24,8 @@ import itertools
 
 nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(BeneparComponent('benepar_en2'))
-nltk.download('averaged_perceptron_tagger')
-    
-# uncomment to suppress warnings about version
-import warnings
-warnings.filterwarnings("ignore")
+nltk.download('averaged_perceptron_tagger', quiet=True)
+
 #add case for how many questions 
 def answerMain(question, corpus):
     qnWord = question.split(" ")[0] # NOTE question is not necessarily the first word
@@ -54,8 +61,11 @@ if __name__ == '__main__':
     
     #all_answers = list(itertools.chain(*answers))
     # output to stdout  
-    for a in answers: 
-        print(a[0])
+    for a in answers:
+        if not a:
+            print('Idk')
+        else:
+            print(a[0])
 
 
 

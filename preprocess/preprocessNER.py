@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import spacy
 from spacy import displacy
 from collections import Counter
