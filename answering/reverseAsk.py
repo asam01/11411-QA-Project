@@ -29,7 +29,7 @@ def answerWh(question, sentences):
         for ent in sent.ents: 
             entity_dict[ent] = ent.label_
 
-        if interrogative == "What":
+        if interrogative.lower() == "what":
             for token in sent:
                 if 'obj' in token.dep_:
                     answers += [token.text]
@@ -37,16 +37,16 @@ def answerWh(question, sentences):
         for word in entity_dict:
             tag = entity_dict[word]
             
-            if tag == 'PERSON' and interrogative == "Who":
+            if tag == 'PERSON' and interrogative.lower() == "who":
                 answers += [word]
 
-            elif (tag == 'DATE' or tag == "TIME") and interrogative == "When":
+            elif (tag == 'DATE' or tag == "TIME") and interrogative.lower() == "when":
                 answers += [word]
 
-            elif tag == "MONEY" and interrogative == "How much" :
+            elif tag == "MONEY" and interrogative.lower() == "how much" :
                 answers += [word]
             
-            elif (tag == 'LOC' or tag == 'GPE') and interrogative == "Where": 
+            elif (tag == 'LOC' or tag == 'GPE') and interrogative.lower() == "where": 
                 answers += [word]
 
     return answers
