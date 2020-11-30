@@ -8,15 +8,8 @@ ENV LC_ALL C.UTF-8
 # Install Python
 RUN apt-get -y update && \
     apt-get -y upgrade && \
-    apt-get -y install python3-pip python3-dev
-
-# Add the files into container, under QA folder, modify this based on your need
-ADD asking /QA/
-ADD answering /QA/
-ADD preprocess /QA/
-ADD neuralcoref /QA/
-ADD __init__.py /QA/
-ADD requirements.txt /QA/
+    apt-get -y install python3-pip python3-dev && \
+    apt-get install -y git
 
 # Install everything
 RUN pip3 install --upgrade pip
@@ -32,11 +25,20 @@ RUN pip3 install Cython==0.29.21
 RUN pip3 install preshed==3.0.2
 RUN pip3 install thinc==7.4.1
 RUN pip3 install benepar==0.1.2
+RUN git clone https://github.com/huggingface/neuralcoref.git
+RUN cd /neuralcoref && pip3 install -r requirements.txt && pip3 install -e . 
 RUN python3 -m spacy download en_core_web_lg
 RUN python3 -m spacy download en_core_web_sm
 RUN python3 -m nltk.downloader punkt
 RUN python3 -m nltk.downloader stopwords  
 RUN python3 -m nltk.downloader averaged_perceptron_tagger
+
+# Add the files into container, under QA folder, modify this based on your need
+ADD asking /QA/
+ADD answering /QA/
+ADD preprocess /QA/
+ADD __init__.py /QA/
+ADD requirements.txt /QA/
 
 # Change the permissions of programs
 CMD ["chmod 777 /QA/*"]
