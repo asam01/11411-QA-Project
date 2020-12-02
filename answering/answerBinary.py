@@ -1,6 +1,8 @@
 import warnings
 warnings.filterwarnings("ignore")
 
+import nltk
+from nltk.corpus import wordnet as wn
 import spacy
 from spacy import displacy
 from spacy.pipeline import EntityRecognizer
@@ -18,6 +20,7 @@ nlp = spacy.load("en_core_web_sm")
 #       Q: Was KT born in 1915?
 #       A: No.
 # - ODD number of negative words [no, not, never, none...]
+# - Antonyms or synonyms present
 
 # input one question, its entity_dict, and a list of top 3 sentences
 # output True/False as answer

@@ -12,6 +12,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 import spacy
 import nltk
+from nltk.corpus import wordnet as wn
 import benepar
 from benepar.spacy_plugin import BeneparComponent
 import reverseAsk
@@ -22,20 +23,39 @@ import io
 import itertools
 
 
+
 nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(BeneparComponent('benepar_en2'))
 nltk.download('averaged_perceptron_tagger', quiet=True)
 
-#add case for how many questions 
+question_words = ["who", "where", "which", "when", "what", 'how many', 'why']
+
+# NOTE need to handle how many and why questions
+
+def findInterrogative(question):
+    question = question.lower()
+    words = question.split()
+    for qWord in question_words:
+        if qWord in question:
+            return qWord
+
+# add case for how many questions 
 def answerMain(question, corpus):
-    qnWord = question.split(" ")[0] # NOTE question is not necessarily the first word
-    qnWords = question.split(" ")[:2] 
-    sentenceList = find_sentence.find_sentence(question, corpus)
-    if qnWord.lower() in ["who", "where", "which", "when", "what"]:
-        answer = reverseAsk.answerWh(question, sentenceList)
-  
+    qnWord = findInterrogative(question)
+
+    # tokenize by sentence
+    nlp = spacy.load('en_core_web_sm', disable = ['ner', 'parser', 'tagger'])
+    nlp.add_pipe(nlp.create_pipe('sentencizer'))
+    doc = nlp(corpus)
+    sentences = [sent.string.strip() for sent in doc.sents] 
+
+    sentenceWithAnswer = find_sentence.find_sentence(question, sentences)
+    print('sentences: ', sentenceWithAnswer)
+    #if qnWord.lower() in ["who", "where", "which", "when", "what"]:
+    if qnWord:
+        answer = reverseAsk.answerWh(question, sentenceWithAnswer)
     else: 
-        answer = [answerBinary.answerBinary(question, sentenceList)]
+        answer = [answerBinary.answerBinary(question, sentenceWithAnswer)]
     return answer
 
 if __name__ == '__main__':
@@ -60,7 +80,8 @@ if __name__ == '__main__':
 
     
     #all_answers = list(itertools.chain(*answers))
-    # output to stdout  
+    # output to stdout
+    #print('answers: ', answers) 
     for a in answers:
         if not a:
             print('Idk')

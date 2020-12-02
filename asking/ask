@@ -31,83 +31,94 @@ if __name__ == '__main__':
     article = sys.argv[1]
     nquestions = int(sys.argv[2])
     
-    #print('step1')
+    print('step1')
     # step 1: take txt file as input 
     article_string = ""
     with io.open(article, 'r', encoding='utf8') as f:
         article_string = f.read()
-    #print('step2')
+    print('step2')
     # step 2: tokenize & convert pronouns to nouns
     preprocessed_article = preprocessNER.convertPronoun2Noun(article_string)
     #print("preprocessed article: ", preprocessed_article)
-    #print('step3')
+    print('step3')
     # step 3: summarize text file (important sentences)
     summary_text = findImportantSentences.run_summarization(preprocessed_article, nquestions)
     #print("summary text: ", summary_text) 
     tokenized_summary = summary_text.split('\n')
-    #print("tokenized summary: ", tokenized_summary)
-    #print('step4')
+
+    #get rid of empty strings 
+    def isEmpty(s):
+        return s == ''
+    final_summary = list(itertools.filterfalse(isEmpty, tokenized_summary))
+
+    # remove fragments  
+    def hasSentenceCloser(s):
+        return ('.' in s) or ('?' in s) or ('!' in s)
+    final_summary = list(filter(hasSentenceCloser, final_summary))
+    print('step4')
     # step 4: generate binary questions 
     # simple binary 
-    simple_binary_questions = simpleBinary.ask_simple_binary(tokenized_summary)
-    cb_input = tokenized_summary 
-    for (q,s) in simple_binary_questions: 
-        for sent in tokenized_summary: 
+    simple_binary_questions = simpleBinary.ask_simple_binary(final_summary)
+    cb_input = final_summary
+    for (q,s) in simple_binary_questions:    
+        for sent in final_summary: 
             if(s==sent): 
-                cb_input.remove(sent) 
+                cb_input.remove(sent)
 
-    #print('step 4.5')
-    #print('simple binary: ', simple_binary_questions)
+    print('step 4.5')
     # compound binary
     compound_binary = []
-    if(nquestions <= len(cb_input)):   
+    if(nquestions <= len(cb_input)):
         for sent in cb_input[:nquestions]:
+            sent = sent.strip()
             for (q,s) in compoundBinary.ask_q(sent):  
                 compound_binary.append((q,s))
     else: 
         for sent in cb_input:
+            sent = sent.strip() 
             for (q,s) in compoundBinary.ask_q(sent):  
                 compound_binary.append((q,s))
 
 
     #print('compound binary: ', compound_binary)
     binary_questions = compound_binary + simple_binary_questions
-    #print('all qs: ', binary_questions )
     wh_questions = [] 
-    #print('step 5')
+    print('step 5')
     # step 5: generate wh- questions
     #print(len(binary_questions))
-    '''if(nquestions <= len(binary_questions)):  
+    if(nquestions <= len(binary_questions)):  
         for (q,s) in binary_questions[:nquestions]:
             wh_questions.append(whQuestion.askWhQuestion(q,s))
     else:
         for (q,s) in binary_questions:
-            wh_questions.append(whQuestion.askWhQuestion(q,s))'''
+            wh_questions.append(whQuestion.askWhQuestion(q,s))
 
-    #all_wh_questions = binary_questions
-    all_wh_questions = []
-    for (q,s) in binary_questions: 
-        all_wh_questions.append(q)
-        
-
-    #print('all wh: ', all_wh_questions)
+    #wh_questions = list(itertools.chain.from_iterable(wh_questions))
+    all_wh_questions = set()
     # flatten
-    #all_wh_questions = list(itertools.chain(*wh_questions))
+    for l in wh_questions:
+        for q in l:
+            if q:
+                all_wh_questions.add(q)
 
+    all_wh_questions = list(all_wh_questions)
 
-    #print("step 6")
+    print("step 6")
     # step 6: rank & output to console
     for i in range(0, nquestions):
         if (i < len(all_wh_questions)):
             question = all_wh_questions[i]
             if question:
                 print(question)
-
         else:
-            print('no question')
+            question = binary_questions[i-len(all_wh_questions)]
+            if question:
+                print(question)
 
     ## NOTE: what questions seem to be problematic
     ##prioritize when, where, who and how many 
+
+    ##generate who from sentence, put it in the middle
 
 
 

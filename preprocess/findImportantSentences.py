@@ -1,5 +1,7 @@
 # this is adapted from https://github.com/akashp1712/nlp-akash/blob/master/text-summarization/TF_IDF_Summarization.py
-
+from __future__ import unicode_literals, print_function
+import spacy 
+from spacy.lang.en import English
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -9,6 +11,7 @@ nltk.download('punkt', quiet=True)
 nltk.download('stopwords', quiet=True)
 from nltk import sent_tokenize, word_tokenize, PorterStemmer
 from nltk.corpus import stopwords
+import re
 # fine tune these parameters later
 #NUM_SENTENCES = 5
 DISCOUNT_FACTOR = .95
@@ -163,7 +166,7 @@ def _generate_summary(sentences, sentenceValue, threshold, num_sentences):
     # extend to output a certain number of sentences. 
     for sentence in sentences:
         if sentence[:15] in sentenceValue and sentenceValue[sentence[:15]] >= (threshold):
-            summary += " " + sentence + "\n"
+            summary += (sentence + "\n")
             sentence_count += 1
 
     if sentence_count < num_sentences:
@@ -183,7 +186,14 @@ def run_summarization(text, num_sentences):
     to run the sent_tokenize() method to create the array of sentences.
     '''
     # 1 Sentence Tokenize
-    sentences = nltk.tokenize.sent_tokenize(text)
+    #sentences = re.split('. |?|!', text)
+    #sentences = nltk.tokenize.sent_tokenize(text)
+ 
+    #nlp = English()
+    nlp = spacy.load('en_core_web_sm', disable = ['ner', 'parser', 'tagger'])
+    nlp.add_pipe(nlp.create_pipe('sentencizer'))
+    doc = nlp(text)
+    sentences = [sent.string.strip() for sent in doc.sents]
     total_documents = len(sentences)
     #print(sentences)
 
@@ -248,5 +258,5 @@ and Richard B. Mellon in honor of their father, Thomas Mellon, patriarch of the 
 The Institute began as a research organization which performed work for government and industry on a contract and was initially established as a department within the University of Pittsburgh.
 In 1927, the Mellon Institute incorporated as an independent nonprofit. In 1937, the Mellon Institute's iconic building was completed and it moved to its new, and current, location on Fifth Avenue.'''
 
-x = run_summarization(text_str,5) 
-print(x)
+#x = run_summarization(text_str,5) 
+#print(x)
