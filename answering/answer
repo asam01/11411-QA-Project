@@ -48,10 +48,7 @@ def answerMain(question, corpus):
     nlp.add_pipe(nlp.create_pipe('sentencizer'))
     doc = nlp(corpus)
     sentences = [sent.string.strip() for sent in doc.sents] 
-
     sentenceWithAnswer = find_sentence.find_sentence(question, sentences)
-    print('sentences: ', sentenceWithAnswer)
-    #if qnWord.lower() in ["who", "where", "which", "when", "what"]:
     if qnWord:
         answer = reverseAsk.answerWh(question, sentenceWithAnswer)
     else: 
@@ -78,10 +75,7 @@ if __name__ == '__main__':
     for q in qs:
         answers.append(answerMain(q, article_string)) 
 
-    
-    #all_answers = list(itertools.chain(*answers))
     # output to stdout
-    #print('answers: ', answers) 
     for a in answers:
         if not a:
             print('Idk')

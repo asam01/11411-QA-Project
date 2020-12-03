@@ -9,6 +9,8 @@ from benepar.spacy_plugin import BeneparComponent
 from nltk.corpus import wordnet as wn
 import simpleBinary
 
+# It has the lowest metallicity of any known star.
+
 #python -m pip install tensorflow==1.14 will help.
 def preprocess(sentence):
     clauses = [] 
