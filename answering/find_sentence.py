@@ -8,6 +8,7 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import stopwords 
 import numpy as np
 
+# adapted from: https://www.geeksforgeeks.org/python-measure-similarity-between-two-sentences-using-cosine-similarity/
 def cosineSim(sentence, question):
     # Program to measure the similarity between  
     # two sentences using cosine similarity. 
@@ -16,8 +17,8 @@ def cosineSim(sentence, question):
     Y = question
   
     # tokenization 
-    X_list = X.split() #word_tokenize(X)  
-    Y_list = Y.split() #word_tokenize(Y) 
+    X_list = X.split() 
+    Y_list = Y.split() 
   
     # sw contains the list of stopwords 
     sw = stopwords.words('english')  
@@ -39,7 +40,7 @@ def cosineSim(sentence, question):
 
     # cosine formula  
     for i in range(len(rvector)): 
-        c+= l1[i]*l2[i] 
+        c += l1[i]*l2[i] 
     if((sum(l1)*sum(l2))**0.5==0):
         return 0 
     cosine = c / float((sum(l1)*sum(l2))**0.5) 
@@ -53,51 +54,12 @@ def find_sentence(question, corpus):
     low_score = 1
     q_tags = nltk.pos_tag(word_tokenize(question))
     score_list = []
-    #corpus = corpus.split("\n")
 
     for sentence in corpus:
         score_list.append(cosineSim(sentence,question))
-        '''score = 0
-        tags = nltk.pos_tag(word_tokenize(sentence))
-        tag_dict = dict()
 
-        #construct dict
-        for pair in tags:
-            word = pair[0].lower()
-            tag = pair[1]
-            if tag not in tag_dict:
-                tag_dict[tag] = [word]
-            else:
-                tag_dict[tag].append(word)
-        #print(tag_dict)
-
-        #loop question
-        for q_pair in q_tags:
-            q_word = q_pair[0].lower()
-            q_tag = q_pair[1]
-
-            if (q_tag in tag_dict):
-                if (q_word in tag_dict[q_tag]):
-                    if q_tag in good_tags:
-                        score += high_score
-                    else:
-                        score += low_score
-
-        score_list.append(score)
-    '''
-    max_score = max(score_list) 
     max_score_index = np.argmax(score_list)
     return corpus[max_score_index]
-    print(max_score)
-    '''sentence_list = []
-    for index in range(len(score_list)):
-        if score_list[index] == max_score:
-            sentence_list.append(corpus[index])
-    # max_index = score_list.index(max(score_list))
-
-    # best_sentence = corpus[max_index]
-    return sentence_list'''
-
 
 q1 = "Is thermal conductivity of a material a measure of its ability to conduct heat?"
 q2 = "Is thermal conductivity a measure?"

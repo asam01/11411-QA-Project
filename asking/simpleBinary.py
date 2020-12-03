@@ -30,7 +30,6 @@ to_be = ['am', 'is', 'are', 'was', 'were']
 '''
 aux_verb = ['must', 'can', 'could', 'shall', 'should', 'will', 'would', 'may', 'might']
 
-# UPDATED: Create questions that include synonyms, antonyms, hyponyms and meronyms for Nouns or Adjectives only
 def ask_simple_binary(input):
     result = []
     for sentence in input:

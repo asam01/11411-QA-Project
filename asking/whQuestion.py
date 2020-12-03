@@ -20,11 +20,7 @@ nlp.add_pipe(BeneparComponent('benepar_en2'))
 # assume inputs are results from compound binary questions
 # and/or simple binary questions
 
-
-# input: 'Did Alan Turing live in England?', {Alan Turing: Who, England: Where}
-# or 'Is Alan Turing nice?' {Alan Turing: Who}
 def generateWhenWhereFromQ(question, entity_dict):
-    #questions_list = []
     doc = nlp(question)
 
     sent = list(doc.sents)[0]
@@ -34,7 +30,6 @@ def generateWhenWhereFromQ(question, entity_dict):
     stringtotakeout = ''
     questionword = '' 
     for clause in constituents:
-        #print(clause.text, clause._.labels)
         if 'PP' in clause._.labels:
             for word in entity_dict: 
                 if((entity_dict[word]=='When' or entity_dict[word]=='Where') and word.text in clause.text):
@@ -72,42 +67,11 @@ def generateWhoFromSentence(sentence, properNoun):
     
     return questions
 
-'''def generateWhatFromQ(question, properNoun): 
-    # Did Alan Turing like ice cream? --> What did Alan Turing like?
-    # deal with "what" questions - replace 
-    # entity_dict word with what
-    question = question.lower() 
-    question = question.split(properNoun.text.lower())
-    question = "What " + "".join(question)
-    return question'''
-
 def generateWhatFromSentence(sentence, properNoun):
     sentence = sentence[:(len(sentence)-1)] # remove exisiting punctuation
     question = sentence.split(properNoun.text)
     question = question[0] + 'what' + question[1] + '?'
     return question
-
-    '''prevtoken = None 
-    doc = nlp(question)
-    for token in doc:
-        if prevtoken is not None and 'compound' in prevtoken.dep_ and 'obj' in token.dep_:
-            stringtotakeout = prevtoken.text + ' ' + token.text        
-            questionword = 'What'
-            question = question.split(stringtotakeout) 
-            question = questionword + ' ' + "".join(question)
-            return question 
-        elif 'obj' in token.dep_:
-            stringtotakeout = token.text        
-            questionword = 'What'
-            question = question.split(stringtotakeout) 
-            question = questionword + ' ' + "".join(question)
-            return question    
-        
-
-        prevtoken = token
-        
-
-    return ""'''
 
 # Alan Turing liked potatoes because they are delicious.
 # --> Did Alan Turning like potatoes because they are delicious?
@@ -133,7 +97,6 @@ def askWhQuestion(q, sentence):
     for properNoun in entity_dict:
         interrogative = entity_dict[properNoun] 
         if interrogative == 'Who':
-            #questions.append(generateWhoFromSentence(sentence, properNoun))
             questions += generateWhoFromSentence(sentence, properNoun)
         elif interrogative == 'What':
             questions.append(generateWhatFromSentence(sentence, properNoun))

@@ -36,11 +36,9 @@ if __name__ == '__main__':
         article_string = f.read()
     # step 2: tokenize & convert pronouns to nouns
     preprocessed_article = preprocessNER.convertPronoun2Noun(article_string)
-    #print("preprocessed article: ", preprocessed_article)
 
     # step 3: summarize text file (important sentences)
     summary_text = findImportantSentences.run_summarization(preprocessed_article, nquestions)
-    #print("summary text: ", summary_text) 
     tokenized_summary = summary_text.split('\n')
 
     #get rid of empty strings 
@@ -75,8 +73,6 @@ if __name__ == '__main__':
             for (q,s) in compoundBinary.ask_q(sent):  
                 compound_binary.append((q,s))
 
-
-    #print('compound binary: ', compound_binary)
     binary_questions = compound_binary + simple_binary_questions
     wh_questions = [] 
 

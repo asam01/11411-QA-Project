@@ -16,8 +16,6 @@ nlp = spacy.load("en_core_web_sm")
 nlp.add_pipe(BeneparComponent('benepar_en2'))
 question_words = ["who", "where", "which", "when", "what", 'how many', 'why']
 
-# NOTE need to handle how many and why questions
-
 def findInterrogative(question):
     question = question.lower()
     words = question.split()

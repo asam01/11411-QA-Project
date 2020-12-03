@@ -9,17 +9,12 @@ from benepar.spacy_plugin import BeneparComponent
 from nltk.corpus import wordnet as wn
 import simpleBinary
 
-# It has the lowest metallicity of any known star.
-
 #python -m pip install tensorflow==1.14 will help.
 def preprocess(sentence):
     clauses = [] 
     nlp = spacy.load("en_core_web_sm")
     nlp.add_pipe(BeneparComponent('benepar_en2'))
     doc = nlp(sentence)
-    #lowerbound = 0 
-
-    #print(len(list(doc.sents)))
     if len(list(doc.sents)) == 0:
         return clauses
     sent = list(doc.sents)[0]
@@ -40,12 +35,6 @@ def preprocess(sentence):
 def ask_compound_bin_question(sentence):
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(sentence)
-
-    # uncomment the next three lines for debugging
-    #print('\ndoc: ', doc)
-    #for token in doc:
-    #    print(token.text, token.pos_, token.dep_, spacy.explain(token.tag_), token.lemma_)
-    
     lemmas = []
     correct_do = ''
     subject_explained = ''
@@ -53,7 +42,6 @@ def ask_compound_bin_question(sentence):
     subj = None
     # lemmatize verb
     for token in doc:
-        # TODO: account for all types of subjects
         if 'subj' in token.dep_:
             subj = token.text
             subject_explained = spacy.explain(token.tag_)
@@ -63,9 +51,7 @@ def ask_compound_bin_question(sentence):
         if token.pos_ == "VERB":
             verb_explained = spacy.explain(token.tag_)
 
-            # TODO: need some way to account for they
             if 'present' in verb_explained:
-                #if subj == 'they': 
                 if len(subjects)>1: 
                     correct_do = 'Do'
                 elif 'plural' in subject_explained:
@@ -78,8 +64,6 @@ def ask_compound_bin_question(sentence):
             else:
                 correct_do = 'Did'
             lemmas.append(token.lemma_)
-
-    #print('lemmas: ', lemmas)
 
     # construct question
     question = correct_do
